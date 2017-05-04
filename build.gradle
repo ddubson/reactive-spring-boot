@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    maven { url "https://artifacts.alfresco.com/nexus/content/repositories/public/" }
+}
+
+dependencies {
+    compile 'com.google.guava:guava:21.0'
+    compile 'org.springframework.boot.experimental:spring-boot-starter-web-reactive:0.1.0.M1'
+    compile 'org.springframework.boot:spring-boot-parent:1.5.3.RELEASE'
+    compile 'org.projectlombok:lombok:1.16.16'
+    testCompile 'junit:junit:4.12'
+}
+
+mainClassName = 'App'
+
