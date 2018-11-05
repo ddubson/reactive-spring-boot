@@ -15,35 +15,20 @@ class ReactiveDataApp
 
 fun main(args: Array<String>) {
     runApplication<ReactiveDataApp>(*args)
-
-    Thread.sleep(1000 * 10)
 }
 
 @Component
 class DataInitializer(val reservationRepository: ReservationRepository) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
-        val names: Flux<String> = Flux.just("Pete", "Julie", "Josh", "Todd")
-        val reservationFlux = names.map {
-            Reservation(null, it)
-        }
-        val map: Flux<Reservation> = reservationFlux.flatMap {
-            this.reservationRepository.save(it)
-        }
-
-        // Subscribe to the publisher (flux) -- at which point the saves will be invoked
-        map.doOnSubscribe { subscription ->
-            println("Subscribed!")
-            subscription.request(10)
-        }
-        map.doOnError {
-            println("errored. $it")
-        }
-        map.doOnComplete {
-            println("Done!")
-        }
-        map.subscribe {
-            println("new reservation. $it")
-        }
+        this.reservationRepository
+                .deleteAll()
+                .thenMany(Flux.just("Pete", "Julie", "Josh", "Todd").map {
+                    Reservation(null, it)
+                }.flatMap {
+                    this.reservationRepository.save(it)
+                })
+                .thenMany(this.reservationRepository.findAll())
+                .subscribe { sub -> println(sub) }
     }
 }
 
