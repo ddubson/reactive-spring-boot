@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body onload="run()">
+<script>
+    function run() {
+      var ws = new WebSocket("ws://localhost:8080/ws/hello")
+      ws.onmessage = function (msg) {
+        var e = document.createElement("div");
+        e.innerText = msg.data.toString();
+        document.getElementById("root").appendChild(e)
+      }
+    }
+</script>
+<div id="root">
+
+</div>
+</body>
+</html>

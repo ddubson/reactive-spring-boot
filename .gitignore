@@ -4,4 +4,4 @@
 build/
 classes/
 logs/
-tomcat.8080/
+out/
