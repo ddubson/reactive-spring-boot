@@ -1,0 +1,5 @@
+dependencies {
+    implementation "com.typesafe.akka:akka-stream_2.11:2.5.2"
+    implementation "com.typesafe.akka:akka-stream-testkit_2.11:2.5.2"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb-reactive"
+}
