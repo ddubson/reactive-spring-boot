@@ -19,12 +19,28 @@ import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.body
 import org.springframework.web.reactive.function.server.router
+import reactor.core.publisher.Flux
 
 @SpringBootApplication
 class TweetServiceApp {
     @Bean
-    fun applicationRunner(): ApplicationRunner {
-        return ApplicationRunner { args ->
+    fun applicationRunner(repository: TweetRepository): ApplicationRunner {
+        return ApplicationRunner {
+            val a1 = Author("a1")
+            val a2 = Author("a2")
+            val a3 = Author("a3")
+            val tweetFlux = Flux.just(
+                    Tweet("1", "this is a a tweet #woo #samples #examples", a1),
+                    Tweet("2", "this is a another tweet #woo #samples #examples", a2),
+                    Tweet("3", "this is a yet another one tweet #woo #samples #examples", a3)
+            )
+
+            repository.deleteAll()
+                    .thenMany(repository.saveAll(tweetFlux))
+                    .thenMany(repository.findAll())
+                    .subscribe { tweet ->
+                        println(tweet)
+                    }
         }
     }
 
@@ -70,7 +86,7 @@ class TweetService(val tweetRepository: TweetRepository,
             .map { it.getHashTags() }
             .reduce { inputA, inputB -> this.join(inputA, inputB) }
             .mapConcat { tags: Set<HashTag> -> tags }
-            .runWith(Sink.asPublisher(AsPublisher.WITH_FANOUT), this.actorMaterializer)
+            .runWith(Sink.asPublisher(AsPublisher.WITHOUT_FANOUT), this.actorMaterializer)
 
     private fun <T> join(inputA: Set<T>, inputB: Set<T>): Set<T> {
         val mergedSet: Set<T> = HashSet()
