@@ -2,3 +2,4 @@ rootProject.name = 'reactive-spring-boot'
 include "reactive-data"
 include "reactive-web"
 include "tweet-service"
+include "test-service"
