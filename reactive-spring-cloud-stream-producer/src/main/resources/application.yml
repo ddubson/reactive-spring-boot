@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: greetings
+          group: greetings-group
+
+server:
+  port: 8081

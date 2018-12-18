@@ -19,4 +19,3 @@ a Mono (publisher)
 
 `text/event-stream` - Server-Side Events - stream of API events, partners nicely
 with publisher types
-
